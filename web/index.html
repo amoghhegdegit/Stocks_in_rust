@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Market Analyst</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Stock Analyst</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#analysis">Analysis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#portfolio">Portfolio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#education">Education</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="text-center mb-4">Stock Market Analyst</h1>
+                <p class="text-center text-muted">Real-time stock analysis with machine learning predictions</p>
+            </div>
+        </div>
+
+        <!-- Stock Search -->
+        <div class="row mb-4">
+            <div class="col-md-6 offset-md-3">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="stockSymbol" placeholder="Enter stock symbol (e.g., AAPL)" value="AAPL">
+                    <button class="btn btn-primary" onclick="fetchStockData()">Analyze</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stock Info Card -->
+        <div class="row mb-4" id="stockInfo" style="display: none;">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 id="stockTitle">Stock Information</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h4 id="currentPrice">$0.00</h4>
+                                    <p class="text-muted">Current Price</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h4 id="priceChange">$0.00</h4>
+                                    <p class="text-muted">Change</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h4 id="percentChange">0.00%</h4>
+                                    <p class="text-muted">% Change</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h4 id="volume">0</h4>
+                                    <p class="text-muted">Volume</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Price Chart</h4>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="priceChart" width="400" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Technical Indicators</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <strong>RSI:</strong> <span id="rsiValue" class="badge bg-secondary">N/A</span>
+                        </div>
+                        <div class="mb-3">
+                            <strong>MACD:</strong> <span id="macdValue" class="badge bg-secondary">N/A</span>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Signal:</strong> <span id="signalValue" class="badge bg-secondary">N/A</span>
+                        </div>
+                        <div class="mb-3">
+                            <strong>Recommendation:</strong> <span id="recommendation" class="badge bg-warning">HOLD</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Predictions Row -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>ML Predictions</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                <h5>1 Day</h5>
+                                <h3 id="prediction1d" class="text-primary">$0.00</h3>
+                                <small class="text-muted">Confidence: <span id="confidence1d">0%</span></small>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <h5>1 Week</h5>
+                                <h3 id="prediction1w" class="text-primary">$0.00</h3>
+                                <small class="text-muted">Confidence: <span id="confidence1w">0%</span></small>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <h5>1 Month</h5>
+                                <h3 id="prediction1m" class="text-primary">$0.00</h3>
+                                <small class="text-muted">Confidence: <span id="confidence1m">0%</span></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Portfolio Section -->
+        <div class="row mb-4" id="portfolioSection">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Portfolio Overview</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h4 id="portfolioValue">$100,000</h4>
+                                    <p class="text-muted">Total Value</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h4 id="portfolioGain">$5,234</h4>
+                                    <p class="text-muted">Total Gain/Loss</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h4 id="portfolioPercent">+5.23%</h4>
+                                    <p class="text-muted">% Change</p>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <button class="btn btn-outline-primary" onclick="fetchPortfolioData()">Refresh</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Education Section -->
+        <div class="row mb-4" id="educationSection">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Investor Education</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card border-primary">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Technical Analysis Basics</h5>
+                                        <p class="card-text">Learn about moving averages, RSI, MACD, and other technical indicators.</p>
+                                        <button class="btn btn-primary" onclick="loadEducationContent('technical-analysis')">Learn More</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card border-success">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Risk Management</h5>
+                                        <p class="card-text">Understand portfolio diversification and risk management strategies.</p>
+                                        <button class="btn btn-success" onclick="loadEducationContent('risk-management')">Learn More</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card border-warning">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Trading Strategies</h5>
+                                        <p class="card-text">Explore different trading strategies and backtesting techniques.</p>
+                                        <button class="btn btn-warning" onclick="loadEducationContent('trading-strategies')">Learn More</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-light mt-5 py-4">
+        <div class="container text-center">
+            <p>&copy; 2024 Stock Market Analyst. Powered by Rust and Machine Learning.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
